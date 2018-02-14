@@ -17,12 +17,12 @@ RUN mkdir ~/temp && cd ~/temp \
   && ./bootstrap && make -j4 && make install
 
 RUN cd ~/temp \
-  && wget https://github.com/google/protobuf/releases/download/v3.5.1/protobuf-all-${PROTOBUF_VERSION}.tar.gz \
+  && wget "https://github.com/google/protobuf/releases/download/v3.5.1/protobuf-all-${PROTOBUF_VERSION}.tar.gz" \
   && cd protobuf-all-${PROTOBUF_VERSION} \
   && ./autogen.sh && ./configure \
   && make && make check && make install
 
-RUN wget https://github.com/SimonKagstrom/kcov/archive/v$KCOV_VERSION.tar.gz \
+RUN wget "https://github.com/SimonKagstrom/kcov/archive/v$KCOV_VERSION.tar.gz" \
   && tar xzf v$KCOV_VERSION.tar.gz \
   && rm v$KCOV_VERSION.tar.gz \
   && cd kcov-$KCOV_VERSION \
