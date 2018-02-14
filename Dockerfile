@@ -6,13 +6,13 @@ RUN apt-get update && \
     libelf-dev libdw-dev binutils-dev zlib1g-dev libiberty-dev wget \
     xz-utils pkg-config python libsqlite3-dev sqlite3
 
-ENV KCOV_VERSION 34 \
-  CMAKE_VERSION 3.10 \
-  CMAKE_BUILD 2 \
-  PROTOBUF_VERSION 3.5.1
+ENV KCOV_VERSION=34 \
+  CMAKE_VERSION=3.10 \
+  CMAKE_BUILD=2 \
+  PROTOBUF_VERSION=3.5.1
 
 RUN mkdir ~/temp && cd ~/temp \
-  && wget "https://cmake.org/files/v$CMAKE_VERSION/cmake-$CMAKE_BUILD.tar.gz" \
+  && wget "https://cmake.org/files/v${CMAKE_VERSION}/cmake-${CMAKE_BUILD}.tar.gz" \
   && tar -xvzf cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz \
   && cd cmake-${CMAKE_VERSION}.${CMAKE_BUILD} \
   && ./bootstrap && make -j4 && make install
