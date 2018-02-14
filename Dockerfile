@@ -48,6 +48,7 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y \
   && rustup update nightly \
   && rustup component add rustfmt-preview --toolchain=nightly
 
+RUN rm -rf ~/temp
 
 RUN bash -l -c 'echo $(rustc --print sysroot)/lib >> /etc/ld.so.conf' \
   && bash -l -c 'echo /usr/local/lib >> /etc/ld.so.conf' \
