@@ -12,6 +12,10 @@ ENV KCOV_VERSION=34 \
   PROTOBUF_VERSION=3.5.1 \
   GO_VERSION=1.9.4
 
+RUN cd /opt \
+  && wget https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz \
+  && tar -xvf go${GO_VERSION}.linux-amd64.tar.gz
+
 RUN mkdir ~/temp && cd ~/temp \
   && wget "https://cmake.org/files/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz" \
   && tar -xzf cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz \
@@ -23,7 +27,7 @@ RUN cd ~/temp \
   && tar -zxf protobuf-all-${PROTOBUF_VERSION}.tar.gz \
   && cd protobuf-${PROTOBUF_VERSION} \
   && ./autogen.sh && ./configure \
-  && make && make check && make install
+  && make && make install
 
 RUN wget "https://github.com/SimonKagstrom/kcov/archive/v$KCOV_VERSION.tar.gz" \
   && tar xzf v$KCOV_VERSION.tar.gz \
@@ -32,10 +36,6 @@ RUN wget "https://github.com/SimonKagstrom/kcov/archive/v$KCOV_VERSION.tar.gz" \
   && mkdir build && cd build \
   && cmake .. && make && make install \
   && cd ../.. && rm -rf kcov-$KCOV_VERSION
-
-RUN cd /opt \
-  && wget https://dl.google.com/go/go${GO_VERSION}}.linux-amd64.tar.gz \
-  && tar -xvf go${GO_VERSION}}.linux-amd64.tar.gz
 
 ENV PATH "/opt/go/bin:/usr/local/bin:$PATH:/root/.cargo/bin"  
 ENV RUSTFLAGS "-C link-dead-code"  
