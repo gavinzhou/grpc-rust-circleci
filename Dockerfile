@@ -11,7 +11,7 @@ ENV KCOV_VERSION 34 \
   PROTOBUF_VERSION 3.5.1
 
 RUN mkdir ~/temp && cd ~/temp \
-  && wget https://cmake.org/files/v$version/cmake-${CMAKE_VERSION}.tar.gz \
+  && wget "https://cmake.org/files/v$version/cmake-${CMAKE_VERSION}.tar.gz" \
   && tar -xvzf cmake-${CMAKE_VERSION}.tar.gz \
   && cd ${CMAKE_VERSION} \
   && ./bootstrap && make -j4 && make install
