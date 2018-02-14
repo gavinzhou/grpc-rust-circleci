@@ -7,17 +7,18 @@ RUN apt-get update && \
     xz-utils pkg-config python libsqlite3-dev sqlite3
 
 ENV KCOV_VERSION 34 \
-  CMAKE_VERSION 3.10.2 \
+  CMAKE_VERSION 3.10 \
+  CMAKE_BUILD 2 \
   PROTOBUF_VERSION 3.5.1
 
 RUN mkdir ~/temp && cd ~/temp \
-  && wget "https://cmake.org/files/v$version/cmake-${CMAKE_VERSION}.tar.gz" \
-  && tar -xvzf cmake-${CMAKE_VERSION}.tar.gz \
-  && cd ${CMAKE_VERSION} \
+  && wget "https://cmake.org/files/v$CMAKE_VERSION/cmake-$CMAKE_BUILD.tar.gz" \
+  && tar -xvzf cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz \
+  && cd cmake-${CMAKE_VERSION}.${CMAKE_BUILD} \
   && ./bootstrap && make -j4 && make install
 
 RUN cd ~/temp \
-  && wget "https://github.com/google/protobuf/releases/download/v3.5.1/protobuf-all-${PROTOBUF_VERSION}.tar.gz" \
+  && wget "https://github.com/google/protobuf/releases/download/v$PROTOBUF_VERSION/protobuf-all-$PROTOBUF_VERSION.tar.gz" \
   && cd protobuf-all-${PROTOBUF_VERSION} \
   && ./autogen.sh && ./configure \
   && make && make check && make install
