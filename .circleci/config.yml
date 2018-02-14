@@ -1,0 +1,93 @@
+version: 2
+
+references:
+  container_config: &container_config
+    docker:
+      - image: google/cloud-sdk
+    environment:
+      PROJECT_NAME: orangesys
+      CLOUDSDK_COMPUTE_ZONE: asia-northeast1-c
+      ORG_PATH: "github.com/orangesys"
+      REPO_PATH: "${ORG_PATH}/${CIRCLE_PROJECT_REPONAME}"
+
+  workspace_root: &workspace_root
+    /tmp/workspace
+
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
+
+jobs:
+  build_container:
+    <<: *container_config
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install docker client
+          command: |
+            set -x
+            VER="17.05.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp/ -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+      - run:
+          name: Build container images
+          command: |
+            version=$(git describe --always --tags)
+            docker build --tag "orangesys/${CIRCLE_PROJECT_REPONAME}:${version}" .
+            docker images
+
+      - run:
+          name: save container image to workspace
+          command: |
+            version=$(git describe --always --tags)
+            mkdir -p /tmp/workspace
+            docker save -o /tmp/workspace/${CIRCLE_PROJECT_REPONAME}.tar "orangesys/${CIRCLE_PROJECT_REPONAME}:${version}"
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - .
+
+  deploy:
+    <<: *container_config
+    steps:
+      - *attach_workspace
+      - setup_remote_docker
+      - run:
+          name: Install docker client
+          command: |
+            set -x
+            VER="17.05.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp/ -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+      - run:
+          name: Load Docker image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /tmp/workspace/${CIRCLE_PROJECT_REPONAME}.tar | true
+            docker images
+      - run:
+          name: Show docker images & set tag & push docker hub and gcloud
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker push orangesys/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}
+            curl -X POST https://hooks.microbadger.com/images/orangesys/alpine-grafana/Vc6Ccpu1qw0ndIHKp_q8BwpgQ18=
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build_container:
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*(-.*)*/ 
+      - deploy:
+          requires:
+            - build_container
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*(-.*)*/
+            branches:
+              ignore: /.*/
