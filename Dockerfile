@@ -20,7 +20,7 @@ RUN mkdir ~/temp && cd ~/temp \
 
 RUN cd ~/temp \
   && wget "https://github.com/google/protobuf/releases/download/v$PROTOBUF_VERSION/protobuf-all-$PROTOBUF_VERSION.tar.gz" \
-  && tar -zvf protobuf-all-${PROTOBUF_VERSION}.tar.gz \
+  && tar -zxf protobuf-all-${PROTOBUF_VERSION}.tar.gz \
   && cd protobuf-${PROTOBUF_VERSION} \
   && ./autogen.sh && ./configure \
   && make && make check && make install

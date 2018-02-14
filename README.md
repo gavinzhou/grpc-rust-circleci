@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/gavinzhou/rust-circleci.svg?style=svg)](https://circleci.com/gh/gavinzhou/rust-circleci)
+[![CircleCI](https://circleci.com/gh/gavinzhou/grpc-rust-circleci.svg?style=svg)](https://circleci.com/gh/gavinzhou/grpc-rust-circleci)
 # grpc-rust-circleci
 
 ## Docker image for CircleCI builds
