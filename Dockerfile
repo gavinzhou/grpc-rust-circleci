@@ -9,17 +9,19 @@ RUN apt-get update && \
 ENV KCOV_VERSION=34 \
   CMAKE_VERSION=3.10 \
   CMAKE_BUILD=2 \
-  PROTOBUF_VERSION=3.5.1
+  PROTOBUF_VERSION=3.5.1 \
+  GO_VERSION=1.9.4
 
 RUN mkdir ~/temp && cd ~/temp \
   && wget "https://cmake.org/files/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz" \
-  && tar -xvzf cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz \
+  && tar -xzf cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz \
   && cd cmake-${CMAKE_VERSION}.${CMAKE_BUILD} \
   && ./bootstrap && make -j4 && make install
 
 RUN cd ~/temp \
   && wget "https://github.com/google/protobuf/releases/download/v$PROTOBUF_VERSION/protobuf-all-$PROTOBUF_VERSION.tar.gz" \
-  && cd protobuf-all-${PROTOBUF_VERSION} \
+  && tar -zvf protobuf-all-${PROTOBUF_VERSION}.tar.gz \
+  && cd protobuf-${PROTOBUF_VERSION} \
   && ./autogen.sh && ./configure \
   && make && make check && make install
 
@@ -31,7 +33,11 @@ RUN wget "https://github.com/SimonKagstrom/kcov/archive/v$KCOV_VERSION.tar.gz" \
   && cmake .. && make && make install \
   && cd ../.. && rm -rf kcov-$KCOV_VERSION
 
-ENV PATH "$PATH:/root/.cargo/bin"  
+RUN cd /opt \
+  && wget https://dl.google.com/go/go${GO_VERSION}}.linux-amd64.tar.gz \
+  && tar -xvf go${GO_VERSION}}.linux-amd64.tar.gz
+
+ENV PATH "/opt/go/bin:/usr/local/bin:$PATH:/root/.cargo/bin"  
 ENV RUSTFLAGS "-C link-dead-code"  
 ENV CFG_RELEASE_CHANNEL "nightly"
 
