@@ -20,14 +20,15 @@ RUN mkdir ~/temp && cd ~/temp \
   && wget "https://cmake.org/files/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz" \
   && tar -xzf cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz \
   && cd cmake-${CMAKE_VERSION}.${CMAKE_BUILD} \
-  && ./bootstrap && make -j4 && make install
+  && ./bootstrap && make -j4 && make install \
+  && cd ~/ && rm -rf ~/temp
 
-RUN cd ~/temp \
-  && wget "https://github.com/google/protobuf/releases/download/v$PROTOBUF_VERSION/protobuf-all-$PROTOBUF_VERSION.tar.gz" \
-  && tar -zxf protobuf-all-${PROTOBUF_VERSION}.tar.gz \
-  && cd protobuf-${PROTOBUF_VERSION} \
-  && ./autogen.sh && ./configure \
-  && make && make install
+RUN mkdir ~/temp && cd ~/temp \
+  && wget "https://github.com/google/protobuf/releases/download/v$PROTOBUF_VERSION/protoc-$PROTOBUF_VERSION-linux-x86_64.zip" \
+  && unzip protoc-$PROTOBUF_VERSION-linux-x86_64.zip \
+  && mv include/* /usr/local/include/ \
+  && mv bin/* /usr/local/bin/ \
+  && cd ~/ && rm -rf ~/temp
 
 RUN wget "https://github.com/SimonKagstrom/kcov/archive/v$KCOV_VERSION.tar.gz" \
   && tar xzf v$KCOV_VERSION.tar.gz \
