@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM rust:1.24.1
 
 RUN apt-get update && \  
     apt-get install -y curl file gcc g++ git make openssh-client \
@@ -42,8 +42,7 @@ ENV PATH "/opt/go/bin:/usr/local/bin:$PATH:/root/.cargo/bin"
 ENV RUSTFLAGS "-C link-dead-code"  
 ENV CFG_RELEASE_CHANNEL "nightly"
 
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y \
-  && rustup update \
+RUN rustup update \
   && rustup install nightly \
   && rustup default nightly \
   && rustup update nightly \
