@@ -43,6 +43,7 @@ ENV RUSTFLAGS "-C link-dead-code"
 ENV CFG_RELEASE_CHANNEL "nightly"
 
 RUN rustup update \
+  && rustup install stable \
   && rustup install nightly \
   && rustup default nightly \
   && rustup update nightly \
