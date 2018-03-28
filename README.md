@@ -10,5 +10,3 @@ can pull docker images with tag
 ```console
 docker pull orangesys/grpc-rust-circleci:v1.23.0
 ```
-
-I will not use latest.
