@@ -22,6 +22,7 @@ references:
   restore_cache: &restore_cache
     keys: 
       - v1-{{ .Branch }}-{{ checksum "Dockerfile" }}
+      - v1-{{ .Branch }}
 
 jobs:
   build_container:
