@@ -14,7 +14,7 @@ ENV KCOV_VERSION=34 \
 
 RUN cd /opt \
   && wget https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz \
-  && tar -xvf go${GO_VERSION}.linux-amd64.tar.gz
+  && tar -xzf go${GO_VERSION}.linux-amd64.tar.gz
 
 RUN mkdir ~/temp && cd ~/temp \
   && wget "https://cmake.org/files/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}.${CMAKE_BUILD}.tar.gz" \
