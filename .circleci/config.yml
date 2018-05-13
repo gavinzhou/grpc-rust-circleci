@@ -49,6 +49,7 @@ jobs:
   push_container:
     <<: *container_config
     steps:
+      - checkout
       - restore_cache: *restore_cache  
       - setup_remote_docker
       - *install_docker_client
