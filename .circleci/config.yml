@@ -21,7 +21,7 @@ references:
         mv /tmp/docker/* /usr/bin
   restore_cache: &restore_cache
     keys: 
-      - v1-{{ .Branch }}-{{ checksum "Dockerfile" }}
+      - v1-{{ .Branch }}
 
 jobs:
   build_container:
@@ -42,14 +42,13 @@ jobs:
             [ ! -d /caches ] && mkdir /caches
             docker save -o /tmp/workspace/${CIRCLE_PROJECT_REPONAME}.tar "orangesys/${CIRCLE_PROJECT_REPONAME}:${version}"
       - save_cache:
-          key: v1-{{ .Branch }}-{{ checksum "Dockerfile" }}
+          key: v1-{{ .Branch }}
           paths:
             - "/caches"            
 
   push_container:
     <<: *container_config
     steps:
-      - checkout
       - restore_cache: *restore_cache  
       - setup_remote_docker
       - *install_docker_client
