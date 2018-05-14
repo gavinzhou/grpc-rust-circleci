@@ -12,7 +12,7 @@ RUN apt-get update && \
   autoconf automake libtool libcurl4-openssl-dev libssl-dev \
   libelf-dev libdw-dev binutils-dev zlib1g-dev libiberty-dev wget \
   xz-utils pkg-config python libsqlite3-dev sqlite3 unzip && \
-  apt-get -t testing install cmake 
+  apt-get -t testing install -y cmake 
 
 
 RUN cd /opt \
