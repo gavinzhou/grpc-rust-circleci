@@ -7,12 +7,12 @@ ENV KCOV_VERSION=34 \
 RUN echo "deb     http://deb.debian.org/debian/    testing main contrib non-free" \
   > /etc/apt/sources.list.d/testing.list
 
-RUN apt-get update && \  
-  apt-get install -y curl file gcc g++ git make openssh-client \
+RUN apt-get update -qq && \  
+  apt-get install -y -qq curl file gcc g++ git make openssh-client \
   autoconf automake libtool libcurl4-openssl-dev libssl-dev \
   libelf-dev libdw-dev binutils-dev zlib1g-dev libiberty-dev wget \
   xz-utils pkg-config python libsqlite3-dev sqlite3 unzip && \
-  apt-get -t testing install -y cmake 
+  apt-get -t testing install -y -qq cmake 
 
 
 RUN cd /opt \
@@ -34,9 +34,9 @@ RUN wget "https://github.com/SimonKagstrom/kcov/archive/v$KCOV_VERSION.tar.gz" \
   && cmake .. && make && make install \
   && cd ../.. && rm -rf kcov-$KCOV_VERSION
 
-ENV PATH "/opt/go/bin:/usr/local/bin:$PATH:/root/.cargo/bin"  
-ENV RUSTFLAGS "-C link-dead-code"  
-ENV CFG_RELEASE_CHANNEL "nightly"
+ENV PATH="/opt/go/bin:/usr/local/bin:$PATH:/root/.cargo/bin" \
+  RUSTFLAGS="-C link-dead-code" \
+  CFG_RELEASE_CHANNEL="nightly"
 
 RUN rustup update \
   && rustup install stable \
