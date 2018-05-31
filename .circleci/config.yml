@@ -21,7 +21,7 @@ references:
         mv /tmp/docker/* /usr/bin
   restore_cache: &restore_cache
     keys: 
-      - v1-{{ .Branch }}
+      - v1-{{ .Revision }}
 
 jobs:
   build_container:
@@ -42,7 +42,7 @@ jobs:
             [ ! -d /caches ] && mkdir /caches
             docker save -o /caches/${CIRCLE_PROJECT_REPONAME}-${version}.tar "orangesys/${CIRCLE_PROJECT_REPONAME}:${version}"
       - save_cache:
-          key: v1-{{ .Branch }}
+          key: v1-{{ .Revision }}
           paths:
             - "/caches"            
 
