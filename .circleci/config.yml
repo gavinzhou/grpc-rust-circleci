@@ -40,7 +40,7 @@ jobs:
           name: save container image to workspace
           command: |
             [ ! -d /caches ] && mkdir /caches
-            docker save -o /caches/${CIRCLE_PROJECT_REPONAME}.tar "orangesys/${CIRCLE_PROJECT_REPONAME}:${version}"
+            docker save -o /caches/${CIRCLE_PROJECT_REPONAME}-${version}.tar "orangesys/${CIRCLE_PROJECT_REPONAME}:${version}"
       - save_cache:
           key: v1-{{ .Revision }}
           paths:
@@ -56,7 +56,7 @@ jobs:
       - run:
           name: Load Docker image layer cache
           command: |
-            docker load -i /caches/${CIRCLE_PROJECT_REPONAME}.tar
+            docker load -i /caches/${CIRCLE_PROJECT_REPONAME}-${version}.tar
             docker images
       - run:
           name: Show docker images & set tag & push docker hub and gcloud
