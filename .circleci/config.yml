@@ -41,6 +41,7 @@ jobs:
           command: |
             [ ! -d /caches ] && mkdir /caches
             docker save -o /caches/${CIRCLE_PROJECT_REPONAME}-${version}.tar "orangesys/${CIRCLE_PROJECT_REPONAME}:${version}"
+            ls /caches
       - save_cache:
           key: v1-{{ checksum "Dockerfile" }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
@@ -56,6 +57,7 @@ jobs:
       - run:
           name: Load Docker image layer cache
           command: |
+            ls /caches
             docker load -i /caches/${CIRCLE_PROJECT_REPONAME}-${CIRCLE_TAG}.tar
             docker images
       - run:
