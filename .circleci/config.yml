@@ -21,7 +21,7 @@ references:
         mv /tmp/docker/* /usr/bin
   restore_cache: &restore_cache
     keys: 
-      - v1-{{ checksum "Dockerfile" }}-{{ .Environment.CIRCLE_SHA1 }}
+      - v1-{{ checksum "Dockerfile" }}-{{ .Environment.CIRCLE_SHA1 }}-{{ .Environment.version }}
 
 jobs:
   build_container:
@@ -35,7 +35,6 @@ jobs:
           command: |
             docker build --tag "orangesys/${CIRCLE_PROJECT_REPONAME}:${version}" .
             docker images
-
       - run:
           name: save container image to workspace
           command: |
@@ -43,7 +42,7 @@ jobs:
             docker save -o /caches/${CIRCLE_PROJECT_REPONAME}-${version}.tar "orangesys/${CIRCLE_PROJECT_REPONAME}:${version}"
             ls /caches
       - save_cache:
-          key: v1-{{ checksum "Dockerfile" }}-{{ .Environment.CIRCLE_SHA1 }}
+          key: v1-{{ checksum "Dockerfile" }}-{{ .Environment.CIRCLE_SHA1 }}-{{ .Environment.version }}
           paths:
             - "/caches"            
 
