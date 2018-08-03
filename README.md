@@ -9,5 +9,5 @@
 can pull docker images with tag
 
 ```console
-docker pull orangesys/grpc-rust-circleci:v1.23.0
+docker pull orangesys/grpc-rust-circleci:v1.28.0
 ```
