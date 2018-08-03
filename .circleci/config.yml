@@ -41,8 +41,12 @@ jobs:
             [ ! -d /caches ] && mkdir /caches
             docker save -o /caches/${CIRCLE_PROJECT_REPONAME}-${version}.tar "orangesys/${CIRCLE_PROJECT_REPONAME}:${version}"
             ls /caches
+      - run:
+          name: create cache key wiht version
+          command: |
+            echo ${version} > _version
       - save_cache:
-          key: v1-{{ checksum "Dockerfile" }}-{{ .Environment.CIRCLE_SHA1 }}-{{ .Environment.version }}
+          key: v1-{{ checksum "Dockerfile" }}-{{ .Environment.CIRCLE_SHA1 }}-{{ checksum "_version" }}
           paths:
             - "/caches"            
 
